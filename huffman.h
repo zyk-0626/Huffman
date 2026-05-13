@@ -52,8 +52,6 @@ void initQueue(Queue* q);
 void enqueue(Queue* q,Node* node);
 // 出队
 Node* dequeue(Queue* q);
-// 是否为空
-bool empty(Queue* q);
 
 // 哈夫曼树相关
 // 创建叶子节点
