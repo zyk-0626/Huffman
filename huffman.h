@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #define queue_size 100
 #define max 20

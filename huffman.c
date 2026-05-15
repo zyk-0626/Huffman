@@ -57,8 +57,8 @@ Tree *buildhuffmanTree(Queue *q)
 {
     while (q->size > 1)
     {
-        Node *left = dequeue(&q);
-        Node *right = dequeue(&q);
+        Node *left = dequeue(q);
+        Node *right = dequeue(q);
         int dad_weight = left->weight + right->weight;
         Node *dad = (Node *)malloc(sizeof(Node));
         dad->left = left;
@@ -78,7 +78,7 @@ void Huffmancode(Node* root,char code[],int depth)
     if (root->left==NULL&&root->right==NULL)
     {
         code[depth]='\0';
-        printf("该字符%c的编码是：%s",root->ch,code);
+        printf("该字符%c的编码是：%s\n",root->ch,code);
         return;
     }
 
