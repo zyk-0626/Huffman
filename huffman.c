@@ -66,7 +66,7 @@ Tree *buildhuffmanTree(Queue *q)
         dad->ch = '\0';
         dad->weight = dad_weight;
 
-        enqueue(q,dad);  //为什么不用&q?
+        enqueue(q,dad);  
     }
     return dequeue(q);
 }
