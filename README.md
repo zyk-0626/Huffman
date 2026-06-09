@@ -14,7 +14,6 @@
 实现思路：给出现频率高的字符分配短编码，频率低的字符分配长编码，整体实现平均编码长度最小化
 
 2. 功能需求
-
 统计输入文本中各字符的出现频率
 基于频率构建哈夫曼树
 生成每个字符的哈夫曼编码
@@ -28,7 +27,8 @@
 
 
 二、核心数据结构设计
-1. 哈夫曼树节点 Nodec运行typedef struct node
+1. 哈夫曼树节点 
+typedef struct node
 {
     char ch;       // 字符（仅叶子节点有效）
     int weight;    // 权值（字符出现频率）
@@ -39,7 +39,8 @@
 叶子节点：存储原始字符和对应频率，左右子树为NULL
 中间节点：ch为'\0'，权值为左右子节点权值之和
 
-2. 优先队列 Queuec运行typedef struct queue
+2. 优先队列 
+typedef struct queue
 {
     Node* data[queue_size];  // 存储节点指针的数组
     int size;                // 当前队列中元素个数
@@ -50,12 +51,14 @@
 
 
 三、核心算法设计
-1. 字符频率统计算法c运行void countFrequency(const char *text, int freq[], char chars[], int *charCount)
+1. 字符频率统计算法
+void countFrequency(const char *text, int freq[], char chars[], int *charCount)
 
 逻辑：遍历文本，逐个统计每个字符的出现次数，将不同字符存入chars数组，对应频率存入freq数组
-时间复杂度：O(n^2)（n为文本长度，双重循环统计），优化可改用哈希表实现O(n)复杂度
+时间复杂度：O(n^2)（n为文本长度，双重循环统计）
 
-2. 哈夫曼树构建算法c运行Tree* buildhuffmanTree(Queue* q)
+2. 哈夫曼树构建算法
+Tree* buildhuffmanTree(Queue* q)
 
 核心逻辑（哈夫曼算法）：
 将所有叶子节点按权值升序加入优先队列
@@ -63,7 +66,8 @@
 将新节点按权值插入优先队列
 重复步骤 2-3，直到队列中只剩一个节点，即为哈夫曼树的根节点
 
-3. 哈夫曼编码生成算法c运行void Huffmancode(Node* root, char code[], int depth)
+3. 哈夫曼编码生成算法
+void Huffmancode(Node* root, char code[], int depth)
 
 核心逻辑（前序遍历）：
 从根节点开始，向左子树走时记录0，向右子树走时记录1
