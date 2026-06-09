@@ -7,9 +7,8 @@ void countFrequency(const char *text, int freq[], char chars[], int *charCount)
     *charCount = 0;
     for (int i = 0; i < len; i++)
     {
-        int found = 0; // 记录每种字符出现的次数
+        int found = 0;
         char ch = text[i];
-        // 缉拿查是否统计过这个字符
         for (int j = 0; j < *charCount; j++)
         {
             if (chars[j] == ch)
@@ -19,7 +18,6 @@ void countFrequency(const char *text, int freq[], char chars[], int *charCount)
                 break;
             }
         }
-        // 没统计过的found+1
         if (found == 0)
         {
             chars[*charCount] = ch;
@@ -29,33 +27,85 @@ void countFrequency(const char *text, int freq[], char chars[], int *charCount)
     }
 }
 
+// 从文件读取内容
+char* readFileContent(const char *filename)
+{
+    FILE *file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        printf("错误：无法打开文件 %s\n", filename);
+        return NULL;
+    }
+
+    fseek(file, 0, SEEK_END);
+    long fileSize = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    char *content = (char *)malloc(fileSize + 1);
+    if (content == NULL)
+    {
+        printf("错误：内存分配失败\n");
+        fclose(file);
+        return NULL;
+    }
+
+    size_t bytesRead = fread(content, 1, fileSize, file);
+    content[bytesRead] = '\0';
+
+    fclose(file);
+    return content;
+}
+
 int main()
 {
-    // 1. 示例文本（也可以改成从文件读取）
-    const char *text = "abracadabra";
-    printf("待压缩文本：%s\n", text);
+    char filename[256];
+    printf("请输入要压缩的文件名：");
+    scanf("%255s", filename);
 
-    // 2. 统计字符频率
-    int freq[256] = {0}; // 记录每个字符出现的频率，eg：freg[0]是记录字符a的次数
-    char chars[256];     // 有哪些不同的字符，eg：chars[0]='a' chars[1]='b'
-    int charCount;       // 文本一共有几种不同字符 如这个文本有5种 a b r c d
+    char *text = readFileContent(filename);
+    if (text == NULL)
+    {
+        return 1;
+    }
+
+    printf("待压缩文本：\n%s\n", text);
+
+    int freq[256] = {0};
+    char chars[256];
+    int charCount;
     countFrequency(text, freq, chars, &charCount);
 
-    // 3. 初始化优先队列，加入所有叶子节点
     Queue q;
     initQueue(&q);
     for (int i = 0; i < charCount; i++)
     {
-        enqueue(&q,createleafNode(chars[i],freq[i]));
+        enqueue(&q, createleafNode(chars[i], freq[i]));
     }
-    
-    // 4. 构建哈夫曼树
-    Tree* Huffman=buildhuffmanTree(&q);
-    
-    // 5. 生成并打印哈夫曼编码
+
+    Tree *Huffman = buildhuffmanTree(&q);
+
+    char outFilename[266];
+    snprintf(outFilename, sizeof(outFilename), "huffman_%s", filename);
+    FILE *outFile = fopen(outFilename, "w");
+    if (outFile == NULL)
+    {
+        printf("错误：无法创建输出文件 %s\n", outFilename);
+        free(text);
+        return 1;
+    }
+
+    fprintf(outFile, "原始文本：\n%s\n\n", text);
+
     char code[max];
-    printf("哈夫曼编码如下：\n");
-    Huffmancode(Huffman,code,0);
-    
+    printf("\n哈夫曼编码如下：\n");
+    Huffmancode(Huffman, code, 0);
+
+    fprintf(outFile, "哈夫曼编码如下：\n");
+    HuffmancodeToFile(Huffman, code, 0, outFile);
+
+    fclose(outFile);
+    printf("\n结果已保存到文件：%s\n", outFilename);
+
+    free(text);
     return 0;
 }

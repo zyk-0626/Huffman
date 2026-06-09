@@ -72,19 +72,37 @@ Tree *buildhuffmanTree(Queue *q)
 }
 
 // 得到哈夫曼编码
-void Huffmancode(Node* root,char code[],int depth)
+void Huffmancode(Node* root, char code[], int depth)
 {
-    if (root==NULL) return;
-    if (root->left==NULL&&root->right==NULL)
+    if (root == NULL) return;
+    if (root->left == NULL && root->right == NULL)
     {
-        code[depth]='\0';
-        printf("该字符%c的编码是：%s\n",root->ch,code);
+        code[depth] = '\0';
+        printf("该字符%c的编码是：%s\n", root->ch, code);
         return;
     }
 
-    code[depth]='0';
-    Huffmancode(root->left,code,depth+1);
+    code[depth] = '0';
+    Huffmancode(root->left, code, depth + 1);
 
-    code[depth]='1';
-    Huffmancode(root->right,code,depth+1);
+    code[depth] = '1';
+    Huffmancode(root->right, code, depth + 1);
+}
+
+// 得到哈夫曼编码（输出到文件）
+void HuffmancodeToFile(Node* root, char code[], int depth, FILE *outFile)
+{
+    if (root == NULL) return;
+    if (root->left == NULL && root->right == NULL)
+    {
+        code[depth] = '\0';
+        fprintf(outFile, "该字符%c的编码是：%s\n", root->ch, code);
+        return;
+    }
+
+    code[depth] = '0';
+    HuffmancodeToFile(root->left, code, depth + 1, outFile);
+
+    code[depth] = '1';
+    HuffmancodeToFile(root->right, code, depth + 1, outFile);
 }

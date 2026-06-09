@@ -41,14 +41,5 @@ Tree* buildhuffmanTree(Queue* q);
 
 // 得到哈夫曼编码
 void Huffmancode(Node* root,char code[],int depth);
-
-
-
-
-
-
-
-
-
-
-
+// 得到哈夫曼编码（输出到文件）
+void HuffmancodeToFile(Node* root, char code[], int depth, FILE *outFile);
