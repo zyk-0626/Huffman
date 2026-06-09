@@ -68,8 +68,6 @@ int main()
         return 1;
     }
 
-    printf("待压缩文本：\n%s\n", text);
-
     int freq[256] = {0};
     char chars[256];
     int charCount;
@@ -97,14 +95,11 @@ int main()
     fprintf(outFile, "原始文本：\n%s\n\n", text);
 
     char code[max];
-    printf("\n哈夫曼编码如下：\n");
-    Huffmancode(Huffman, code, 0);
-
     fprintf(outFile, "哈夫曼编码如下：\n");
     HuffmancodeToFile(Huffman, code, 0, outFile);
 
     fclose(outFile);
-    printf("\n结果已保存到文件：%s\n", outFilename);
+    printf("结果已保存到文件：%s\n", outFilename);
 
     free(text);
     return 0;
