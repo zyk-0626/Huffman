@@ -43,3 +43,8 @@ Tree* buildhuffmanTree(Queue* q);
 void Huffmancode(Node* root,char code[],int depth);
 // 得到哈夫曼编码（输出到文件）
 void HuffmancodeToFile(Node* root, char code[], int depth, FILE *outFile);
+
+// 统计字符频率
+void countFrequency(const char *text, int freq[], char chars[], int *charCount);
+// 从文件读取内容
+char* readFileContent(const char *filename);

@@ -106,3 +106,59 @@ void HuffmancodeToFile(Node* root, char code[], int depth, FILE *outFile)
     code[depth] = '1';
     HuffmancodeToFile(root->right, code, depth + 1, outFile);
 }
+
+// 统计文本中字符的出现频率
+void countFrequency(const char *text, int freq[], char chars[], int *charCount)
+{
+    int len = strlen(text);
+    *charCount = 0;
+    for (int i = 0; i < len; i++)
+    {
+        int found = 0;
+        char ch = text[i];
+        for (int j = 0; j < *charCount; j++)
+        {
+            if (chars[j] == ch)
+            {
+                freq[j]++;
+                found = 1;
+                break;
+            }
+        }
+        if (found == 0)
+        {
+            chars[*charCount] = ch;
+            freq[*charCount] = 1;
+            (*charCount)++;
+        }
+    }
+}
+
+// 从文件读取内容
+char* readFileContent(const char *filename)
+{
+    FILE *file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        printf("错误：无法打开文件 %s\n", filename);
+        return NULL;
+    }
+
+    fseek(file, 0, SEEK_END);
+    long fileSize = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    char *content = (char *)malloc(fileSize + 1);
+    if (content == NULL)
+    {
+        printf("错误：内存分配失败\n");
+        fclose(file);
+        return NULL;
+    }
+
+    size_t bytesRead = fread(content, 1, fileSize, file);
+    content[bytesRead] = '\0';
+
+    fclose(file);
+    return content;
+}
